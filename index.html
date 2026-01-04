@@ -2,178 +2,264 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gabinete Presidencial - RFL•★•REAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palácio do Planalto - Gabinete Presidencial</title>
     <style>
-        :root { --cor-exec: #27ae60; --bg: #121212; --card-bg: #1e1e1e; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
-        
-        .header { background: var(--cor-exec); padding: 15px; text-align: center; border-bottom: 4px solid #f1c40f; }
-        
-        /* Grid Principal */
-        .dashboard { 
-            display: grid; 
-            grid-template-columns: 300px 1fr 300px; 
-            gap: 20px; 
-            padding: 20px; 
-            max-width: 1400px; 
-            margin: auto; 
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --accent-gold: #fbbf24;
+            --neon-blue: #38bdf8;
+            --danger-red: #ef4444;
+            --text-gray: #94a3b8;
         }
 
-        .card { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid #333; }
-        h3 { border-bottom: 1px solid #444; padding-bottom: 10px; margin-top: 0; color: var(--cor-exec); }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-        /* Indicadores */
-        .stat-item { margin-bottom: 15px; }
-        .stat-bar { background: #333; height: 10px; border-radius: 5px; margin-top: 5px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--cor-exec); transition: 0.5s; }
+        /* Top Header com Estilo Dourado */
+        .header-bar {
+            width: 90%;
+            margin-top: 15px;
+            padding: 12px;
+            background: linear-gradient(90deg, transparent, var(--panel-bg), transparent);
+            border: 1px solid var(--accent-gold);
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
 
-        /* Agenda de Crises */
-        .crise-alerta { 
-            background: #721c24; color: #f8d7da; padding: 10px; 
-            border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #f5c6cb;
+        /* Stats Section - Gauges Circulares */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .gauge-item { text-align: center; }
+
+        .circle-gauge {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: conic-gradient(var(--neon-blue) var(--percent, 0%), #334155 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+            transition: 0.5s;
+        }
+
+        .circle-gauge::after {
+            content: attr(data-value);
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
             font-size: 0.9rem;
         }
 
-        /* Editor de Ofício (Estilo Papel) */
-        .paper { 
-            background: white; color: #333; padding: 40px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
-            min-height: 400px; position: relative;
-        }
-        textarea { 
-            width: 100%; height: 200px; border: none; outline: none; 
-            font-family: serif; font-size: 1.2rem; line-height: 1.6;
-            background: repeating-linear-gradient(white, white 30px, #e5e5e5 31px);
-            padding-top: 8px; resize: none;
+        .gauge-label { font-size: 0.75rem; color: var(--text-gray); margin-top: 8px; text-transform: uppercase; }
+
+        /* Grid de Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            width: 95%;
+            max-width: 1200px;
         }
 
-        button { 
-            width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; 
-            border-radius: 5px; border: none; font-weight: bold; 
+        .panel {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #334155;
         }
-        .btn-gov { background: var(--cor-exec); color: white; }
-        .btn-gov:hover { filter: brightness(1.2); }
+
+        /* Lado Esquerdo - Decreto */
+        .scroll-container { text-align: center; }
+        
+        .scroll-image {
+            width: 250px;
+            margin-bottom: 20px;
+            filter: sepia(0.3) drop-shadow(0 0 10px rgba(0,0,0,0.5));
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .btn-protocol {
+            background: linear-gradient(180deg, #fcd34d 0%, #d97706 100%);
+            color: #451a03;
+            font-weight: 800;
+            padding: 16px 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            transition: 0.2s;
+        }
+
+        .btn-protocol:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+        /* Lado Direito - Crises e Mensagens */
+        h3 { font-size: 1rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+
+        .crisis-card {
+            background: #450a0a;
+            border: 1px solid var(--danger-red);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .icon-warn { color: var(--danger-red); font-size: 1.5rem; }
+
+        .message-feed {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border: 1px solid #334155;
+        }
+
+        .msg-line { padding: 8px 0; border-bottom: 1px dotted #334155; color: #cbd5e1; }
+        .msg-line b { color: var(--neon-blue); }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>PRESIDÊNCIA DA REPÚBLICA</h1>
-    <span>Comandante Supremo: <strong>RFL•★•REAL</strong></span>
-</div>
+    <div class="header-bar">
+        PALÁCIO DO PLANALTO - GABINETE PRESIDENCIAL
+    </div>
 
-<div class="dashboard">
-    
-    <div class="col">
-        <div class="card">
-            <h3>Situação Nacional</h3>
-            <div class="stat-item">
-                Tesouro: <strong id="val-orc">R$ 1.000.000</strong>
-            </div>
-            <div class="stat-item">
-                Aprovação Popular: <span id="txt-pop">50%</span>
-                <div class="stat-bar"><div id="bar-pop" class="bar-fill" style="width: 50%;"></div></div>
-            </div>
-            <div class="stat-item">
-                Apoio no Congresso: <span id="txt-leg">40%</span>
-                <div class="stat-bar"><div id="bar-leg" class="bar-fill" style="width: 40%; background: #2980b9;"></div></div>
-            </div>
-            <div class="stat-item">
-                Risco de Impeachment: <span id="txt-risco">5%</span>
-                <div class="stat-bar"><div id="bar-risco" class="bar-fill" style="width: 5%; background: #e74c3c;"></div></div>
-            </div>
+    <div class="stats-container">
+        <div class="gauge-item">
+            <div class="circle-gauge" id="g-pop" data-value="75%" style="--percent: 75%"></div>
+            <div class="gauge-label">Popularity</div>
         </div>
-        
-        <div class="card" style="margin-top: 20px;">
-            <h3>Ministérios</h3>
-            <button onclick="investir('Saúde')">🏥 Saúde</button>
-            <button onclick="investir('Educação')">🎓 Educação</button>
-            <button onclick="investir('Segurança')">🛡️ Segurança</button>
+        <div class="gauge-item">
+            <div class="circle-gauge" id="g-tre" data-value="R$" style="--percent: 40%; box-shadow: 0 0 20px rgba(251,191,36,0.2); border-top-color: var(--accent-gold); --percent: 40%"></div>
+            <div class="gauge-label">Treasury</div>
+        </div>
+        <div class="gauge-item">
+            <div class="circle-gauge" id="g-sta" data-value="50%" style="--percent: 50%"></div>
+            <div class="gauge-label">Stability</div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="paper">
-            <div style="text-align: center;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Coat_of_arms_of_Brazil.svg" width="60" alt="Brasão">
-                <p><strong>REPUBLICA FEDERATIVA DO BRASIL</strong><br>PODER EXECUTIVO</p>
-            </div>
-            <br>
-            <label>Destino:</label>
-            <select id="destino-oficio" style="width: 100%; padding: 5px;">
-                <option value="LEG">Congresso Nacional (Aprovação de Verba/Lei)</option>
-                <option value="JUD">STF (Consulta Jurídica)</option>
-            </select>
-            <br><br>
-            <textarea id="texto-oficio" placeholder="Escreva aqui a mensagem ou proposta de lei que será enviada em tempo real..."></textarea>
-            
-            <button class="btn-gov" onclick="protocolar()">ASSINAR E ENVIAR OFÍCIO</button>
-        </div>
-    </div>
+    <div class="main-grid">
+        <div class="panel">
+            <div class="scroll-container">
+                <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/acervo/simbolos-nacionais/brasao-da-republica/brasao_nacional_cor.png/@@images/image" alt="Brasão" class="scroll-image" style="width: 80px;">
+                <h3 style="color: var(--accent-gold);">RASCUNHO DE NOVO DECRETO</h3>
+                
+                <input type="text" id="titulo-decreto" class="input-field" placeholder="Título do Decreto Presidencial...">
+                <textarea id="texto-decreto" class="input-field" style="height: 100px; resize: none;" placeholder="Descreva os detalhes da nova lei ou medida..."></textarea>
+                
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; white-space: nowrap;">ENVIAR PARA:</span>
+                    <select id="select-destino" class="input-field" style="margin-bottom: 0;">
+                        <option value="Congresso e STF">Legislativo e Judiciário</option>
+                        <option value="Congresso">Apenas Legislativo</option>
+                        <option value="STF">Apenas Judiciário</option>
+                    </select>
+                </div>
 
-    <div class="col">
-        <div class="card">
-            <h3>🚨 Crises Urgentes</h3>
-            <div id="caixa-crises">
-                <div class="crise-alerta">
-                    <strong>Grevistas na Capital:</strong> Caminhoneiros pedem redução do diesel. 
-                    <button onclick="resolverCrise(this, -10000, 5)" style="padding: 2px; font-size: 10px;">Ceder</button>
+                <button class="btn-protocol" onclick="protocolar()">PROTOCOL & SEND</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>URGENT CRISES</h3>
+            <div id="crisis-list">
+                <div class="crisis-card">
+                    <span class="icon-warn">⚠</span>
+                    <div>
+                        <strong>Fuel Shortage</strong><br>
+                        <small style="color: #fca5a5;">Public Health Emergency</small>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card" style="margin-top: 20px;">
-            <h3>📬 Respostas Recebidas</h3>
-            <div id="caixa-respostas" style="font-size: 0.8rem; color: #888;">
-                Aguardando retorno do Legislativo ou Judiciário...
+            <h3 style="margin-top: 25px;">INCOMING MESSAGES</h3>
+            <div class="message-feed" id="feed">
+                <div class="msg-line"><b>Sistema:</b> Sessão iniciada com sucesso.</div>
+                <div class="msg-line"><b>Legislativo:</b> Bill "Green Economy" Approved.</div>
+                <div class="msg-line"><b>Judiciário:</b> Mandato de segurança em análise.</div>
             </div>
         </div>
     </div>
 
-</div>
+    <script>
+        // Funções de Interação
+        function protocolar() {
+            const titulo = document.getElementById('titulo-decreto').value;
+            const destino = document.getElementById('select-destino').value;
+            const feed = document.getElementById('feed');
 
-<script>
-    let orcamento = 1000000;
-    let popularidade = 50;
+            if(titulo === "") {
+                alert("Por favor, dê um título ao decreto.");
+                return;
+            }
 
-    function investir(area) {
-        if(orcamento >= 50000) {
-            orcamento -= 50000;
-            popularidade += 3;
-            atualizarGraficos();
-            alert("Investimento de R$ 50.000 realizado na " + area);
-        } else {
-            alert("Tesouro Nacional insuficiente!");
+            // Adiciona mensagem ao feed
+            const novaMsg = document.createElement('div');
+            novaMsg.className = "msg-line";
+            novaMsg.innerHTML = `<b>Você:</b> Decreto "${titulo}" enviado para ${destino}.`;
+            feed.prepend(novaMsg);
+
+            // Limpa campos
+            document.getElementById('titulo-decreto').value = "";
+            document.getElementById('texto-decreto').value = "";
+
+            alert("Ofício Protocolado com Sucesso!");
         }
-    }
 
-    function resolverCrise(elemento, custo, pop) {
-        orcamento += custo;
-        popularidade += pop;
-        elemento.parentElement.remove();
-        atualizarGraficos();
-        alert("Crise resolvida.");
-    }
-
-    function atualizarGraficos() {
-        document.getElementById('val-orc').innerText = "R$ " + orcamento.toLocaleString();
-        document.getElementById('txt-pop').innerText = popularidade + "%";
-        document.getElementById('bar-pop').style.width = popularidade + "%";
-        
-        if(popularidade < 20) {
-            document.getElementById('bar-risco').style.width = "80%";
-            document.getElementById('txt-risco').innerText = "80% (PERIGO!)";
+        // Simulação de mudança nos medidores (Gauges)
+        function atualizarGauge(id, valor) {
+            const el = document.getElementById(id);
+            el.style.setProperty('--percent', valor + '%');
+            el.setAttribute('data-value', valor + '%');
         }
-    }
 
-    function protocolar() {
-        const texto = document.getElementById('texto-oficio').value;
-        if(texto.length < 10) return alert("Descreva melhor o ofício.");
-        
-        alert("Ofício protocolado! O documento agora aparecerá na página do destinatário.");
-        document.getElementById('texto-oficio').value = "";
-    }
-</script>
-
+        // Exemplo: Mudar estabilidade após 3 segundos
+        setTimeout(() => {
+            atualizarGauge('g-sta', 65);
+        }, 3000);
+    </script>
 </body>
 </html>
