@@ -2,264 +2,248 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Palácio do Planalto - Gabinete Presidencial</title>
+    <title>Gabinete Presidencial - RFL•★•REAL</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --panel-bg: #1e293b;
-            --accent-gold: #fbbf24;
-            --neon-blue: #38bdf8;
-            --danger-red: #ef4444;
-            --text-gray: #94a3b8;
+            --bg-body: #2c2c2c;
+            --bg-card: #1e1e1e;
+            --green-primary: #27ae60;
+            --yellow-accent: #f1c40f;
+            --red-danger: #e74c3c;
+            --text-light: #e0e0e0;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-dark);
-            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-light);
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
         }
 
-        /* Top Header com Estilo Dourado */
-        .header-bar {
-            width: 90%;
-            margin-top: 15px;
-            padding: 12px;
-            background: linear-gradient(90deg, transparent, var(--panel-bg), transparent);
-            border: 1px solid var(--accent-gold);
-            border-radius: 4px;
+        /* Top Header */
+        .main-header {
+            width: 100%;
+            background-color: var(--green-primary);
+            padding: 20px 0;
             text-align: center;
-            font-weight: bold;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+            border-bottom: 4px solid var(--yellow-accent);
         }
 
-        /* Stats Section - Gauges Circulares */
-        .stats-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 30px 0;
-        }
+        .main-header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
+        .main-header p { margin: 5px 0 0; font-weight: bold; }
 
-        .gauge-item { text-align: center; }
-
-        .circle-gauge {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            background: conic-gradient(var(--neon-blue) var(--percent, 0%), #334155 0);
+        /* Barra de Mandato (Tempo) */
+        .time-bar {
+            background-color: #3d3d3d;
+            width: 60%;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
-            transition: 0.5s;
-        }
-
-        .circle-gauge::after {
-            content: attr(data-value);
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: var(--bg-dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            justify-content: space-around;
             font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        .gauge-label { font-size: 0.75rem; color: var(--text-gray); margin-top: 8px; text-transform: uppercase; }
-
-        /* Grid de Layout */
-        .main-grid {
+        /* Layout Grid */
+        .dashboard-container {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 25px;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 20px;
             width: 95%;
-            max-width: 1200px;
+            max-width: 1400px;
+            padding-bottom: 50px;
         }
 
-        .panel {
-            background: var(--panel-bg);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid #334155;
-        }
-
-        /* Lado Esquerdo - Decreto */
-        .scroll-container { text-align: center; }
-        
-        .scroll-image {
-            width: 250px;
-            margin-bottom: 20px;
-            filter: sepia(0.3) drop-shadow(0 0 10px rgba(0,0,0,0.5));
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        .btn-protocol {
-            background: linear-gradient(180deg, #fcd34d 0%, #d97706 100%);
-            color: #451a03;
-            font-weight: 800;
-            padding: 16px 50px;
-            border: none;
+        /* Estilo dos Cards */
+        .card {
+            background-color: var(--bg-card);
             border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-            transition: 0.2s;
-        }
-
-        .btn-protocol:hover { transform: scale(1.02); filter: brightness(1.1); }
-
-        /* Lado Direito - Crises e Mensagens */
-        h3 { font-size: 1rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-
-        .crisis-card {
-            background: #450a0a;
-            border: 1px solid var(--danger-red);
             padding: 15px;
-            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .card h3 {
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--yellow-accent);
+        }
+
+        /* Barras de Progresso */
+        .stat-row { margin: 15px 0; }
+        .stat-info { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .progress-bg { background-color: #333; height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--green-primary); transition: 0.5s; }
+
+        /* Papel Central (Ofício) */
+        .oficio-container {
+            background-color: #fff;
+            color: #333;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            min-height: 500px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
+        }
+
+        .brasao-img { width: 80px; margin-bottom: 15px; }
+        .oficio-header { text-align: center; font-weight: bold; margin-bottom: 30px; }
+        
+        .oficio-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #eee;
+            background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 31px);
+            line-height: 31px;
+            padding: 8px;
+            resize: none;
+            font-family: serif;
+            font-size: 1.1rem;
+        }
+
+        .btn-send {
+            background-color: var(--green-primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* Crises e Plantão (Coluna Direita) */
+        .alert-box {
+            background-color: #2c1a1a;
+            border-left: 5px solid var(--red-danger);
+            padding: 10px;
             margin-bottom: 15px;
-        }
-
-        .icon-warn { color: var(--danger-red); font-size: 1.5rem; }
-
-        .message-feed {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 15px;
-            height: 250px;
-            overflow-y: auto;
             font-size: 0.85rem;
-            line-height: 1.6;
-            border: 1px solid #334155;
         }
 
-        .msg-line { padding: 8px 0; border-bottom: 1px dotted #334155; color: #cbd5e1; }
-        .msg-line b { color: var(--neon-blue); }
+        .btn-action {
+            background-color: var(--green-primary);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="header-bar">
-        PALÁCIO DO PLANALTO - GABINETE PRESIDENCIAL
+    <header class="main-header">
+        <h1>PRESIDÊNCIA DA REPÚBLICA</h1>
+        <p>Comandante Supremo: RFL•★•REAL</p>
+    </header>
+
+    <div class="time-bar">
+        <span>Mês atual: 48</span>
+        <span>|</span>
+        <span>Próxima Eleição: -47 meses</span>
     </div>
 
-    <div class="stats-container">
-        <div class="gauge-item">
-            <div class="circle-gauge" id="g-pop" data-value="75%" style="--percent: 75%"></div>
-            <div class="gauge-label">Popularity</div>
-        </div>
-        <div class="gauge-item">
-            <div class="circle-gauge" id="g-tre" data-value="R$" style="--percent: 40%; box-shadow: 0 0 20px rgba(251,191,36,0.2); border-top-color: var(--accent-gold); --percent: 40%"></div>
-            <div class="gauge-label">Treasury</div>
-        </div>
-        <div class="gauge-item">
-            <div class="circle-gauge" id="g-sta" data-value="50%" style="--percent: 50%"></div>
-            <div class="gauge-label">Stability</div>
-        </div>
-    </div>
-
-    <div class="main-grid">
-        <div class="panel">
-            <div class="scroll-container">
-                <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/acervo/simbolos-nacionais/brasao-da-republica/brasao_nacional_cor.png/@@images/image" alt="Brasão" class="scroll-image" style="width: 80px;">
-                <h3 style="color: var(--accent-gold);">RASCUNHO DE NOVO DECRETO</h3>
-                
-                <input type="text" id="titulo-decreto" class="input-field" placeholder="Título do Decreto Presidencial...">
-                <textarea id="texto-decreto" class="input-field" style="height: 100px; resize: none;" placeholder="Descreva os detalhes da nova lei ou medida..."></textarea>
-                
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <span style="font-size: 0.8rem; white-space: nowrap;">ENVIAR PARA:</span>
-                    <select id="select-destino" class="input-field" style="margin-bottom: 0;">
-                        <option value="Congresso e STF">Legislativo e Judiciário</option>
-                        <option value="Congresso">Apenas Legislativo</option>
-                        <option value="STF">Apenas Judiciário</option>
-                    </select>
+    <main class="dashboard-container">
+        
+        <section>
+            <div class="card">
+                <h3>3. Situação National</h3>
+                <div class="stat-row">
+                    <div class="stat-info"><span>Tesouro</span><span>R$ 1.000.000</span></div>
                 </div>
-
-                <button class="btn-protocol" onclick="protocolar()">PROTOCOL & SEND</button>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h3>URGENT CRISES</h3>
-            <div id="crisis-list">
-                <div class="crisis-card">
-                    <span class="icon-warn">⚠</span>
-                    <div>
-                        <strong>Fuel Shortage</strong><br>
-                        <small style="color: #fca5a5;">Public Health Emergency</small>
-                    </div>
+                <div class="stat-row">
+                    <div class="stat-info"><span>Aprovação Popular</span><span>50%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 50%;"></div></div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-info"><span>Apoio no Congresso</span><span>40%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 40%; background-color: #3498db;"></div></div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-info"><span>Risco de Impeachment</span><span>5%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 5%; background-color: var(--red-danger);"></div></div>
                 </div>
             </div>
 
-            <h3 style="margin-top: 25px;">INCOMING MESSAGES</h3>
-            <div class="message-feed" id="feed">
-                <div class="msg-line"><b>Sistema:</b> Sessão iniciada com sucesso.</div>
-                <div class="msg-line"><b>Legislativo:</b> Bill "Green Economy" Approved.</div>
-                <div class="msg-line"><b>Judiciário:</b> Mandato de segurança em análise.</div>
+            <div class="card" style="margin-top: 20px;">
+                <h3>3. Ministérios</h3>
+                <div class="grid-buttons">
+                    <button class="btn-action">🏥 Saúde</button>
+                    <button class="btn-action">🎓 Educação</button>
+                    <button class="btn-action">📈 Investimentos</button>
+                    <button class="btn-action">🛡️ Segurança</button>
+                </div>
+                <button class="btn-action" style="width: 100%; margin-top: 10px; background-color: #555;">Ver Relação</button>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <script>
-        // Funções de Interação
-        function protocolar() {
-            const titulo = document.getElementById('titulo-decreto').value;
-            const destino = document.getElementById('select-destino').value;
-            const feed = document.getElementById('feed');
+        <section class="oficio-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Coat_of_arms_of_Brazil.svg" class="brasao-img" alt="Brasão">
+            <div class="oficio-header">
+                REPÚBLICA FEDERATIVA DO BRASIL<br>
+                PODER EXECUTIVO
+            </div>
 
-            if(titulo === "") {
-                alert("Por favor, dê um título ao decreto.");
-                return;
-            }
+            <input type="text" class="oficio-input" placeholder="Destinatário (Ex: Congresso Nacional)">
+            <textarea placeholder="Escreva o texto oficial aqui..."></textarea>
 
-            // Adiciona mensagem ao feed
-            const novaMsg = document.createElement('div');
-            novaMsg.className = "msg-line";
-            novaMsg.innerHTML = `<b>Você:</b> Decreto "${titulo}" enviado para ${destino}.`;
-            feed.prepend(novaMsg);
+            <button class="btn-send">ASSINAR E ENVIAR</button>
+        </section>
 
-            // Limpa campos
-            document.getElementById('titulo-decreto').value = "";
-            document.getElementById('texto-decreto').value = "";
+        <section>
+            <div class="card">
+                <h3>⚠️ Plantão Urgente</h3>
+                <div class="alert-box">
+                    <strong>ID News feed:</strong><br>
+                    Greve na Capital: Caminhoneiros pedem redução do diesel.
+                </div>
+                <div class="alert-box" style="border-left-color: var(--yellow-accent);">
+                    <strong>D'caixa crised:</strong><br>
+                    Negociações atrasadas no Ministério da Saúde.
+                </div>
+            </div>
 
-            alert("Ofício Protocolado com Sucesso!");
-        }
+            <div class="card" style="margin-top: 20px;">
+                <h3>🚨 Crises Urgentes</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Resolver Crise das Relatividades</span>
+                    <button class="btn-action" style="background-color: var(--red-danger);">Responder</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <span>Resolver Crise Logística</span>
+                    <button class="btn-action" style="background-color: var(--yellow-accent); color: black;">Narrativo</button>
+                </div>
+            </div>
+        </section>
 
-        // Simulação de mudança nos medidores (Gauges)
-        function atualizarGauge(id, valor) {
-            const el = document.getElementById(id);
-            el.style.setProperty('--percent', valor + '%');
-            el.setAttribute('data-value', valor + '%');
-        }
+    </main>
 
-        // Exemplo: Mudar estabilidade após 3 segundos
-        setTimeout(() => {
-            atualizarGauge('g-sta', 65);
-        }, 3000);
-    </script>
 </body>
 </html>
