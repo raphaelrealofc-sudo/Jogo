@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Governança - RFL•★•REAL</title>
+    <style>
+        :root {
+            --executivo: #27ae60;
+            --legislativo: #2980b9;
+            --judiciario: #8e44ad;
+            --bg: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #333;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid #f1c40f;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            background: #444;
+            padding: 10px 20px;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat { font-weight: bold; }
+        .stat span { color: #f1c40f; }
+
+        #game-container {
+            background: #2c3e50;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .turno-card {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .executivo { border: 4px solid var(--executivo); }
+        .legislativo { border: 4px solid var(--legislativo); }
+        .judiciario { border: 4px solid var(--judiciario); }
+
+        button {
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover { opacity: 0.8; transform: scale(1.05); }
+
+        .btn-exec { background: var(--executivo); color: white; }
+        .btn-leg { background: var(--legislativo); color: white; }
+        .btn-jud { background: var(--judiciario); color: white; }
+
+        #log {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            background: #000;
+            padding: 10px;
+            border-radius: 5px;
+            height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>RFL•★•REAL: Sistema de Governança</h1>
+</header>
+
+<div class="stats-bar">
+    <div class="stat">Orçamento: $<span id="orcamento">1000</span></div>
+    <div class="stat">Popularidade: <span id="popularidade">50</span>%</div>
+    <div class="stat">Estabilidade: <span id="estabilidade">50</span>%</div>
+</div>
+
+<div id="game-container">
+    <h2 id="fase-titulo">Turno do Executivo</h2>
+    <div id="turno-area" class="turno-card executivo">
+        <p id="descricao-fase">Presidente, escolha um projeto para o país:</p>
+        <div id="acoes">
+            </div>
+    </div>
+
+    <div id="log">
+        <strong>Histórico:</strong>
+        <div id="log-texto">O jogo começou.</div>
+    </div>
+</div>
+
+<script>
+    // Variáveis de Estado
+    let status = { orcamento: 1000, popularidade: 50, estabilidade: 50 };
+    let turno = "Executivo";
+    let projetoAtual = null;
+
+    const configFases = {
+        "Executivo": {
+            cor: "executivo",
+            titulo: "Turno do Executivo (Presidente)",
+            descricao: "Proponha uma medida para o país:",
+            opcoes: [
+                { nome: "Investir na Saúde", custo: 200, pop: 15, est: 5 },
+                { nome: "Privatizar Empresa", custo: -300, pop: -10, est: 10 },
+                { nome: "Aumentar Impostos", custo: -500, pop: -20, est: 15 }
+            ]
+        },
+        "Legislativo": {
+            cor: "legislativo",
+            titulo: "Turno do Legislativo (Congresso)",
+            descricao: "O Executivo propôs: [PROJETO]. Vocês aprovam?",
+            opcoes: [
+                { nome: "Aprovar Projeto", acao: "aprovar" },
+                { nome: "Vetar Projeto", acao: "vetar" }
+            ]
+        },
+        "Judiciario": {
+            cor: "judiciario",
+            titulo: "Turno do Judiciário (STF)",
+            descricao: "Analise a constitucionalidade da decisão.",
+            opcoes: [
+                { nome: "Manter Decisão", acao: "manter" },
+                { nome: "Anular (Inconstitucional)", acao: "anular" }
+            ]
+        }
+    };
+
+    function atualizarInterface() {
+        document.getElementById('orcamento').innerText = status.orcamento;
+        document.getElementById('popularidade').innerText = status.popularidade;
+        document.getElementById('estabilidade').innerText = status.estabilidade;
+
+        const fase = configFases[turno];
+        document.getElementById('fase-titulo').innerText = fase.titulo;
+        document.getElementById('turno-area').className = `turno-card ${fase.cor}`;
+        
+        let desc = fase.descricao;
+        if(projetoAtual) desc = desc.replace("[PROJETO]", projetoAtual.nome);
+        document.getElementById('descricao-fase').innerText = desc;
+
+        const acoesDiv = document.getElementById('acoes');
+        acoesDiv.innerHTML = "";
+
+        fase.opcoes.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt.nome;
+            btn.className = `btn-${turno.substring(0,3).toLowerCase()}`;
+            btn.onclick = () => processarEscolha(opt);
+            acoesDiv.appendChild(btn);
+        });
+    }
+
+    function processarEscolha(escolha) {
+        const log = document.getElementById('log-texto');
+
+        if (turno === "Executivo") {
+            projetoAtual = escolha;
+            log.innerHTML += `<br>Executivo propôs: ${escolha.nome}`;
+            turno = "Legislativo";
+        } 
+        else if (turno === "Legislativo") {
+            if (escolha.acao === "vetar") {
+                status.estabilidade -= 10;
+                log.innerHTML += `<br>Legislativo VETOU o projeto. Crise política!`;
+                projetoAtual = null;
+                turno = "Executivo";
+            } else {
+                log.innerHTML += `<br>Legislativo APROVOU. Aguardando Judiciário...`;
+                turno = "Judiciario";
+            }
+        } 
+        else if (turno === "Judiciario") {
+            if (escolha.acao === "anular") {
+                status.estabilidade += 5;
+                log.innerHTML += `<br>Judiciário ANULOU por ser inconstitucional.`;
+            } else {
+                aplicarProjeto();
+                log.innerHTML += `<br>Projeto CONCLUÍDO com sucesso!`;
+            }
+            projetoAtual = null;
+            turno = "Executivo";
+        }
+
+        atualizarInterface();
+    }
+
+    function aplicarProjeto() {
+        status.orcamento -= projetoAtual.custo;
+        status.popularidade += projetoAtual.pop;
+        status.estabilidade += projetoAtual.est;
+        
+        // Limites
+        if(status.popularidade > 100) status.popularidade = 100;
+        if(status.popularidade < 0) alert("GAME OVER: O povo fez uma revolução!");
+    }
+
+    atualizarInterface();
+</script>
+
+</body>
+</html>
