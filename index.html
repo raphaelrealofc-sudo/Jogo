@@ -11,6 +11,7 @@
             --yellow-accent: #f1c40f;
             --red-danger: #e74c3c;
             --text-light: #e0e0e0;
+            --blue-info: #3498db;
         }
 
         body {
@@ -23,138 +24,34 @@
             align-items: center;
         }
 
-        /* Top Header */
-        .main-header {
-            width: 100%;
-            background-color: var(--green-primary);
-            padding: 20px 0;
-            text-align: center;
-            border-bottom: 4px solid var(--yellow-accent);
-        }
+        /* Header e Barra de Mandato */
+        .main-header { width: 100%; background-color: var(--green-primary); padding: 20px 0; text-align: center; border-bottom: 4px solid var(--yellow-accent); }
+        .time-bar { background-color: #3d3d3d; width: 60%; margin: 20px 0; padding: 10px; border-radius: 20px; display: flex; justify-content: space-around; font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        .main-header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-        .main-header p { margin: 5px 0 0; font-weight: bold; }
+        /* Grid */
+        .dashboard-container { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 20px; width: 95%; max-width: 1400px; padding-bottom: 50px; }
 
-        /* Barra de Mandato (Tempo) */
-        .time-bar {
-            background-color: #3d3d3d;
-            width: 60%;
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        /* Layout Grid */
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr;
-            gap: 20px;
-            width: 95%;
-            max-width: 1400px;
-            padding-bottom: 50px;
-        }
-
-        /* Estilo dos Cards */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 8px;
-            padding: 15px;
-            border: 1px solid #444;
-        }
-
-        .card h3 {
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            margin-top: 0;
-            font-size: 1.1rem;
-            color: var(--yellow-accent);
-        }
+        .card { background-color: var(--bg-card); border-radius: 8px; padding: 15px; border: 1px solid #444; }
+        .card h3 { border-bottom: 1px solid #444; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; color: var(--yellow-accent); }
 
         /* Barras de Progresso */
         .stat-row { margin: 15px 0; }
         .stat-info { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
-        .progress-bg { background-color: #333; height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: var(--green-primary); transition: 0.5s; }
+        .progress-bg { background-color: #333; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid #000; }
+        .progress-fill { height: 100%; transition: 0.8s ease-in-out; }
 
-        /* Papel Central (Ofício) */
-        .oficio-container {
-            background-color: #fff;
-            color: #333;
-            padding: 40px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        /* Papel Central */
+        .oficio-container { background-color: #fff; color: #333; padding: 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; }
         .brasao-img { width: 80px; margin-bottom: 15px; }
-        .oficio-header { text-align: center; font-weight: bold; margin-bottom: 30px; }
-        
-        .oficio-input {
-            width: 100%;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
+        textarea { width: 100%; height: 200px; border: 1px solid #eee; background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 31px); line-height: 31px; padding: 8px; resize: none; font-family: serif; font-size: 1.1rem; }
 
-        textarea {
-            width: 100%;
-            height: 200px;
-            border: 1px solid #eee;
-            background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 31px);
-            line-height: 31px;
-            padding: 8px;
-            resize: none;
-            font-family: serif;
-            font-size: 1.1rem;
-        }
+        /* Botões */
+        .btn-action { background-color: var(--green-primary); border: none; color: white; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-send { background-color: var(--green-primary); color: white; border: none; padding: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; }
+        .grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        .btn-send {
-            background-color: var(--green-primary);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        /* Crises e Plantão (Coluna Direita) */
-        .alert-box {
-            background-color: #2c1a1a;
-            border-left: 5px solid var(--red-danger);
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-
-        .btn-action {
-            background-color: var(--green-primary);
-            border: none;
-            color: white;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
+        .alert-box { background-color: #2c1a1a; border-left: 5px solid var(--red-danger); padding: 10px; margin-bottom: 15px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -165,85 +62,112 @@
     </header>
 
     <div class="time-bar">
-        <span>Mês atual: 48</span>
+        <span>Mês: <span id="display-mes">1</span>/48</span>
         <span>|</span>
-        <span>Próxima Eleição: -47 meses</span>
+        <span>Tesouro: <span id="display-tesouro" style="color:var(--yellow-accent)">R$ 1.000.000</span></span>
     </div>
 
     <main class="dashboard-container">
         
         <section>
             <div class="card">
-                <h3>3. Situação National</h3>
+                <h3>📊 Situação Nacional</h3>
                 <div class="stat-row">
-                    <div class="stat-info"><span>Tesouro</span><span>R$ 1.000.000</span></div>
+                    <div class="stat-info"><span>Aprovação Popular</span><span id="txt-pop">50%</span></div>
+                    <div class="progress-bg"><div id="bar-pop" class="progress-fill" style="width: 50%; background-color: var(--green-primary);"></div></div>
                 </div>
                 <div class="stat-row">
-                    <div class="stat-info"><span>Aprovação Popular</span><span>50%</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width: 50%;"></div></div>
+                    <div class="stat-info"><span>Apoio no Congresso</span><span id="txt-leg">40%</span></div>
+                    <div class="progress-bg"><div id="bar-leg" class="progress-fill" style="width: 40%; background-color: var(--blue-info);"></div></div>
                 </div>
                 <div class="stat-row">
-                    <div class="stat-info"><span>Apoio no Congresso</span><span>40%</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width: 40%; background-color: #3498db;"></div></div>
-                </div>
-                <div class="stat-row">
-                    <div class="stat-info"><span>Risco de Impeachment</span><span>5%</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width: 5%; background-color: var(--red-danger);"></div></div>
+                    <div class="stat-info"><span>Risco de Impeachment</span><span id="txt-risco">5%</span></div>
+                    <div class="progress-bg"><div id="bar-risco" class="progress-fill" style="width: 5%; background-color: var(--red-danger);"></div></div>
                 </div>
             </div>
 
             <div class="card" style="margin-top: 20px;">
-                <h3>3. Ministérios</h3>
+                <h3>🏛️ Ministérios (Investir R$ 100k)</h3>
                 <div class="grid-buttons">
-                    <button class="btn-action">🏥 Saúde</button>
-                    <button class="btn-action">🎓 Educação</button>
-                    <button class="btn-action">📈 Investimentos</button>
-                    <button class="btn-action">🛡️ Segurança</button>
+                    <button class="btn-action" onclick="investir('Saúde', 5, 2)">🏥 Saúde</button>
+                    <button class="btn-action" onclick="investir('Educação', 4, 3)">🎓 Educação</button>
+                    <button class="btn-action" onclick="investir('Economia', 2, 8)">📈 Economia</button>
+                    <button class="btn-action" onclick="investir('Segurança', 6, 1)">🛡️ Segurança</button>
                 </div>
-                <button class="btn-action" style="width: 100%; margin-top: 10px; background-color: #555;">Ver Relação</button>
             </div>
         </section>
 
         <section class="oficio-container">
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Coat_of_arms_of_Brazil.svg" class="brasao-img" alt="Brasão">
-            <div class="oficio-header">
-                REPÚBLICA FEDERATIVA DO BRASIL<br>
-                PODER EXECUTIVO
-            </div>
-
-            <input type="text" class="oficio-input" placeholder="Destinatário (Ex: Congresso Nacional)">
-            <textarea placeholder="Escreva o texto oficial aqui..."></textarea>
-
-            <button class="btn-send">ASSINAR E ENVIAR</button>
+            <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">REPÚBLICA FEDERATIVA DO BRASIL</div>
+            <input type="text" style="width:100%; padding:10px; margin-bottom:10px" placeholder="Assunto do Ofício">
+            <textarea placeholder="Excelentíssimos membros do Congresso..."></textarea>
+            <button class="btn-send" onclick="alert('Ofício Protocolado!')">ASSINAR E ENVIAR</button>
         </section>
 
         <section>
             <div class="card">
                 <h3>⚠️ Plantão Urgente</h3>
-                <div class="alert-box">
-                    <strong>ID News feed:</strong><br>
-                    Greve na Capital: Caminhoneiros pedem redução do diesel.
-                </div>
-                <div class="alert-box" style="border-left-color: var(--yellow-accent);">
-                    <strong>D'caixa crised:</strong><br>
-                    Negociações atrasadas no Ministério da Saúde.
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 20px;">
-                <h3>🚨 Crises Urgentes</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span>Resolver Crise das Relatividades</span>
-                    <button class="btn-action" style="background-color: var(--red-danger);">Responder</button>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                    <span>Resolver Crise Logística</span>
-                    <button class="btn-action" style="background-color: var(--yellow-accent); color: black;">Narrativo</button>
+                <div id="container-crises">
+                    <div class="alert-box">
+                        <strong>GREVE GERAL:</strong> Professores pedem aumento.
+                        <br><button class="btn-action" style="background:var(--red-danger); padding:2px 5px; font-size:10px" onclick="this.parentElement.remove()">Ignorar</button>
+                    </div>
                 </div>
             </div>
         </section>
-
     </main>
 
+    <script>
+        // Variáveis de Estado do Jogo
+        let estado = {
+            tesouro: 1000000,
+            popularidade: 50,
+            apoioLeg: 40,
+            risco: 5,
+            mes: 1
+        };
+
+        function investir(nome, ganhoPop, ganhoLeg) {
+            const custo = 100000;
+
+            if (estado.tesouro >= custo) {
+                // Lógica de cálculo
+                estado.tesouro -= custo;
+                estado.popularidade = Math.min(100, estado.popularidade + ganhoPop);
+                estado.apoioLeg = Math.min(100, estado.apoioLeg + ganhoLeg);
+                
+                // O risco cai se a popularidade sobe
+                estado.risco = Math.max(0, 100 - estado.popularidade - (estado.apoioLeg / 2));
+
+                atualizarInterface();
+                console.log(`Investimento em ${nome} realizado!`);
+            } else {
+                alert("❌ Saldo insuficiente no Tesouro Nacional!");
+            }
+        }
+
+        function atualizarInterface() {
+            // Atualiza textos
+            document.getElementById('display-tesouro').innerText = `R$ ${estado.tesouro.toLocaleString()}`;
+            document.getElementById('txt-pop').innerText = `${estado.popularidade}%`;
+            document.getElementById('txt-leg').innerText = `${estado.apoioLeg}%`;
+            document.getElementById('txt-risco').innerText = `${Math.floor(estado.risco)}%`;
+
+            // Atualiza Barras
+            document.getElementById('bar-pop').style.width = `${estado.popularidade}%`;
+            document.getElementById('bar-leg').style.width = `${estado.apoioLeg}%`;
+            document.getElementById('bar-risco').style.width = `${estado.risco}%`;
+
+            // Muda cor do risco se estiver muito alto
+            if(estado.risco > 50) {
+                document.getElementById('bar-risco').style.backgroundColor = "black";
+                document.getElementById('txt-risco').style.color = "red";
+                document.getElementById('txt-risco').style.fontWeight = "bold";
+            } else {
+                document.getElementById('bar-risco').style.backgroundColor = "var(--red-danger)";
+            }
+        }
+    </script>
 </body>
 </html>
