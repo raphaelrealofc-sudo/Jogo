@@ -2,172 +2,86 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gabinete Presidencial - RFL•★•REAL</title>
+    <title>Simulador de Poder - RFL•★•REAL</title>
     <style>
         :root {
-            --bg-body: #2c2c2c;
-            --bg-card: #1e1e1e;
-            --green-primary: #27ae60;
-            --yellow-accent: #f1c40f;
-            --red-danger: #e74c3c;
-            --text-light: #e0e0e0;
-            --blue-info: #3498db;
+            --bg: #0f172a;
+            --exec: #27ae60;
+            --leg: #3498db;
+            --jud: #8e44ad;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-light);
-            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
         }
 
-        /* Header e Barra de Mandato */
-        .main-header { width: 100%; background-color: var(--green-primary); padding: 20px 0; text-align: center; border-bottom: 4px solid var(--yellow-accent); }
-        .time-bar { background-color: #3d3d3d; width: 60%; margin: 20px 0; padding: 10px; border-radius: 20px; display: flex; justify-content: space-around; font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: 5px; color: #f1c40f; }
+        p { color: #94a3b8; margin-bottom: 40px; }
 
-        /* Grid */
-        .dashboard-container { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 20px; width: 95%; max-width: 1400px; padding-bottom: 50px; }
+        .lobby-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+        }
 
-        .card { background-color: var(--bg-card); border-radius: 8px; padding: 15px; border: 1px solid #444; }
-        .card h3 { border-bottom: 1px solid #444; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; color: var(--yellow-accent); }
+        .role-card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            color: white;
+        }
 
-        /* Barras de Progresso */
-        .stat-row { margin: 15px 0; }
-        .stat-info { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
-        .progress-bg { background-color: #333; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid #000; }
-        .progress-fill { height: 100%; transition: 0.8s ease-in-out; }
+        .role-card:hover { transform: translateY(-10px); }
 
-        /* Papel Central */
-        .oficio-container { background-color: #fff; color: #333; padding: 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; }
-        .brasao-img { width: 80px; margin-bottom: 15px; }
-        textarea { width: 100%; height: 200px; border: 1px solid #eee; background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 31px); line-height: 31px; padding: 8px; resize: none; font-family: serif; font-size: 1.1rem; }
+        /* Estilos específicos por papel */
+        .role-exec:hover { border-color: var(--exec); box-shadow: 0 0 20px rgba(39, 174, 96, 0.4); }
+        .role-leg:hover { border-color: var(--leg); box-shadow: 0 0 20px rgba(52, 152, 219, 0.4); }
+        .role-jud:hover { border-color: var(--jud); box-shadow: 0 0 20px rgba(142, 68, 173, 0.4); }
 
-        /* Botões */
-        .btn-action { background-color: var(--green-primary); border: none; color: white; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
-        .btn-send { background-color: var(--green-primary); color: white; border: none; padding: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; }
-        .grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        .alert-box { background-color: #2c1a1a; border-left: 5px solid var(--red-danger); padding: 10px; margin-bottom: 15px; font-size: 0.85rem; }
+        .role-card i { font-size: 3rem; display: block; margin-bottom: 15px; }
+        .role-card h2 { margin: 0; font-size: 1.5rem; }
+        .role-card p { font-size: 0.8rem; margin-top: 10px; color: #cbd5e1; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <h1>PRESIDÊNCIA DA REPÚBLICA</h1>
-        <p>Comandante Supremo: RFL•★•REAL</p>
-    </header>
+    <h1>EQUILÍBRIO DE PODER</h1>
+    <p>Selecione sua posição no Estado Brasileiro para iniciar a simulação em tempo real.</p>
 
-    <div class="time-bar">
-        <span>Mês: <span id="display-mes">1</span>/48</span>
-        <span>|</span>
-        <span>Tesouro: <span id="display-tesouro" style="color:var(--yellow-accent)">R$ 1.000.000</span></span>
+    <div class="lobby-grid">
+        <a href="executivo.html" class="role-card role-exec">
+            <i>🏛️</i>
+            <h2>EXECUTIVO</h2>
+            <p>Presidente: Governe, invista em ministérios e envie decretos para aprovação.</p>
+        </a>
+
+        <a href="legislativo.html" class="role-card role-leg">
+            <i>📜</i>
+            <h2>LEGISLATIVO</h2>
+            <p>Congresso: Vote leis, aprove o orçamento e fiscalize as ações do Presidente.</p>
+        </a>
+
+        <a href="judiciario.html" class="role-card role-jud">
+            <i>⚖️</i>
+            <h2>JUDICIÁRIO</h2>
+            <p>STF: Garanta a constituição e anule decretos que firam a ordem nacional.</p>
+        </a>
     </div>
 
-    <main class="dashboard-container">
-        
-        <section>
-            <div class="card">
-                <h3>📊 Situação Nacional</h3>
-                <div class="stat-row">
-                    <div class="stat-info"><span>Aprovação Popular</span><span id="txt-pop">50%</span></div>
-                    <div class="progress-bg"><div id="bar-pop" class="progress-fill" style="width: 50%; background-color: var(--green-primary);"></div></div>
-                </div>
-                <div class="stat-row">
-                    <div class="stat-info"><span>Apoio no Congresso</span><span id="txt-leg">40%</span></div>
-                    <div class="progress-bg"><div id="bar-leg" class="progress-fill" style="width: 40%; background-color: var(--blue-info);"></div></div>
-                </div>
-                <div class="stat-row">
-                    <div class="stat-info"><span>Risco de Impeachment</span><span id="txt-risco">5%</span></div>
-                    <div class="progress-bg"><div id="bar-risco" class="progress-fill" style="width: 5%; background-color: var(--red-danger);"></div></div>
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 20px;">
-                <h3>🏛️ Ministérios (Investir R$ 100k)</h3>
-                <div class="grid-buttons">
-                    <button class="btn-action" onclick="investir('Saúde', 5, 2)">🏥 Saúde</button>
-                    <button class="btn-action" onclick="investir('Educação', 4, 3)">🎓 Educação</button>
-                    <button class="btn-action" onclick="investir('Economia', 2, 8)">📈 Economia</button>
-                    <button class="btn-action" onclick="investir('Segurança', 6, 1)">🛡️ Segurança</button>
-                </div>
-            </div>
-        </section>
-
-        <section class="oficio-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Coat_of_arms_of_Brazil.svg" class="brasao-img" alt="Brasão">
-            <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">REPÚBLICA FEDERATIVA DO BRASIL</div>
-            <input type="text" style="width:100%; padding:10px; margin-bottom:10px" placeholder="Assunto do Ofício">
-            <textarea placeholder="Excelentíssimos membros do Congresso..."></textarea>
-            <button class="btn-send" onclick="alert('Ofício Protocolado!')">ASSINAR E ENVIAR</button>
-        </section>
-
-        <section>
-            <div class="card">
-                <h3>⚠️ Plantão Urgente</h3>
-                <div id="container-crises">
-                    <div class="alert-box">
-                        <strong>GREVE GERAL:</strong> Professores pedem aumento.
-                        <br><button class="btn-action" style="background:var(--red-danger); padding:2px 5px; font-size:10px" onclick="this.parentElement.remove()">Ignorar</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // Variáveis de Estado do Jogo
-        let estado = {
-            tesouro: 1000000,
-            popularidade: 50,
-            apoioLeg: 40,
-            risco: 5,
-            mes: 1
-        };
-
-        function investir(nome, ganhoPop, ganhoLeg) {
-            const custo = 100000;
-
-            if (estado.tesouro >= custo) {
-                // Lógica de cálculo
-                estado.tesouro -= custo;
-                estado.popularidade = Math.min(100, estado.popularidade + ganhoPop);
-                estado.apoioLeg = Math.min(100, estado.apoioLeg + ganhoLeg);
-                
-                // O risco cai se a popularidade sobe
-                estado.risco = Math.max(0, 100 - estado.popularidade - (estado.apoioLeg / 2));
-
-                atualizarInterface();
-                console.log(`Investimento em ${nome} realizado!`);
-            } else {
-                alert("❌ Saldo insuficiente no Tesouro Nacional!");
-            }
-        }
-
-        function atualizarInterface() {
-            // Atualiza textos
-            document.getElementById('display-tesouro').innerText = `R$ ${estado.tesouro.toLocaleString()}`;
-            document.getElementById('txt-pop').innerText = `${estado.popularidade}%`;
-            document.getElementById('txt-leg').innerText = `${estado.apoioLeg}%`;
-            document.getElementById('txt-risco').innerText = `${Math.floor(estado.risco)}%`;
-
-            // Atualiza Barras
-            document.getElementById('bar-pop').style.width = `${estado.popularidade}%`;
-            document.getElementById('bar-leg').style.width = `${estado.apoioLeg}%`;
-            document.getElementById('bar-risco').style.width = `${estado.risco}%`;
-
-            // Muda cor do risco se estiver muito alto
-            if(estado.risco > 50) {
-                document.getElementById('bar-risco').style.backgroundColor = "black";
-                document.getElementById('txt-risco').style.color = "red";
-                document.getElementById('txt-risco').style.fontWeight = "bold";
-            } else {
-                document.getElementById('bar-risco').style.backgroundColor = "var(--red-danger)";
-            }
-        }
-    </script>
 </body>
 </html>
