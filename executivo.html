@@ -2,93 +2,176 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel da Presidência - RFL•★•REAL</title>
+    <title>Gabinete Presidencial - RFL•★•REAL</title>
     <style>
-        :root { --cor-exec: #27ae60; --bg: #121212; }
+        :root { --cor-exec: #27ae60; --bg: #121212; --card-bg: #1e1e1e; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
         
-        .header { background: var(--cor-exec); padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .header { background: var(--cor-exec); padding: 15px; text-align: center; border-bottom: 4px solid #f1c40f; }
         
-        .container { max-width: 900px; margin: 20px auto; padding: 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        /* Grid Principal */
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: 300px 1fr 300px; 
+            gap: 20px; 
+            padding: 20px; 
+            max-width: 1400px; 
+            margin: auto; 
+        }
 
-        /* Status do País */
-        .card { background: #1e1e1e; padding: 20px; border-radius: 10px; border: 1px solid #333; }
-        .status-val { font-size: 1.5rem; color: #f1c40f; font-weight: bold; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid #333; }
+        h3 { border-bottom: 1px solid #444; padding-bottom: 10px; margin-top: 0; color: var(--cor-exec); }
 
-        /* Criador de Ofício */
-        .editor-oficio { background: white; color: #333; padding: 30px; border-radius: 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
-        .brasao { text-align: center; font-weight: bold; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #333; }
-        
-        textarea { width: 100%; height: 150px; border: 1px solid #ccc; padding: 10px; font-family: serif; font-size: 1.1rem; resize: none; margin: 10px 0; }
-        
-        select, button { width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
-        .btn-enviar { background: var(--cor-exec); color: white; font-size: 1rem; }
-        
-        #log-envio { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
+        /* Indicadores */
+        .stat-item { margin-bottom: 15px; }
+        .stat-bar { background: #333; height: 10px; border-radius: 5px; margin-top: 5px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--cor-exec); transition: 0.5s; }
+
+        /* Agenda de Crises */
+        .crise-alerta { 
+            background: #721c24; color: #f8d7da; padding: 10px; 
+            border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #f5c6cb;
+            font-size: 0.9rem;
+        }
+
+        /* Editor de Ofício (Estilo Papel) */
+        .paper { 
+            background: white; color: #333; padding: 40px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+            min-height: 400px; position: relative;
+        }
+        textarea { 
+            width: 100%; height: 200px; border: none; outline: none; 
+            font-family: serif; font-size: 1.2rem; line-height: 1.6;
+            background: repeating-linear-gradient(white, white 30px, #e5e5e5 31px);
+            padding-top: 8px; resize: none;
+        }
+
+        button { 
+            width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; 
+            border-radius: 5px; border: none; font-weight: bold; 
+        }
+        .btn-gov { background: var(--cor-exec); color: white; }
+        .btn-gov:hover { filter: brightness(1.2); }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>PALÁCIO DO PLANALTO</h1>
-    <p>Gabinete da Presidência da República</p>
+    <h1>PRESIDÊNCIA DA REPÚBLICA</h1>
+    <span>Comandante Supremo: <strong>RFL•★•REAL</strong></span>
 </div>
 
-<div class="container">
-    <div class="card">
-        <h3>Tesouro Nacional</h3>
-        <div class="status-val">R$ <span id="orcamento">1.000.000</span></div>
-        <hr>
-        <h3>Popularidade</h3>
-        <div class="status-val"><span id="pop">50</span>%</div>
-        <p><small>Ações pendentes influenciam esses números.</small></p>
-    </div>
-
-    <div class="card">
-        <div class="editor-oficio">
-            <div class="brasao">Ofício Presidencial nº 001/2026</div>
-            
-            <label>Destinatário:</label>
-            <select id="destino">
-                <option value="Congresso Nacional">Congresso Nacional (Legislativo)</option>
-                <option value="Supremo Tribunal">Supremo Tribunal Federal (Judiciário)</option>
-            </select>
-
-            <label>Conteúdo da Proposta:</label>
-            <textarea id="texto-oficio" placeholder="Ex: Solicito urgência na aprovação da verba para infraestrutura..."></textarea>
-            
-            <button class="btn-enviar" onclick="protocolarOficio()">PROTOCOLAR E ENVIAR</button>
+<div class="dashboard">
+    
+    <div class="col">
+        <div class="card">
+            <h3>Situação Nacional</h3>
+            <div class="stat-item">
+                Tesouro: <strong id="val-orc">R$ 1.000.000</strong>
+            </div>
+            <div class="stat-item">
+                Aprovação Popular: <span id="txt-pop">50%</span>
+                <div class="stat-bar"><div id="bar-pop" class="bar-fill" style="width: 50%;"></div></div>
+            </div>
+            <div class="stat-item">
+                Apoio no Congresso: <span id="txt-leg">40%</span>
+                <div class="stat-bar"><div id="bar-leg" class="bar-fill" style="width: 40%; background: #2980b9;"></div></div>
+            </div>
+            <div class="stat-item">
+                Risco de Impeachment: <span id="txt-risco">5%</span>
+                <div class="stat-bar"><div id="bar-risco" class="bar-fill" style="width: 5%; background: #e74c3c;"></div></div>
+            </div>
         </div>
-        <div id="log-envio"></div>
+        
+        <div class="card" style="margin-top: 20px;">
+            <h3>Ministérios</h3>
+            <button onclick="investir('Saúde')">🏥 Saúde</button>
+            <button onclick="investir('Educação')">🎓 Educação</button>
+            <button onclick="investir('Segurança')">🛡️ Segurança</button>
+        </div>
     </div>
+
+    <div class="col">
+        <div class="paper">
+            <div style="text-align: center;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Coat_of_arms_of_Brazil.svg" width="60" alt="Brasão">
+                <p><strong>REPUBLICA FEDERATIVA DO BRASIL</strong><br>PODER EXECUTIVO</p>
+            </div>
+            <br>
+            <label>Destino:</label>
+            <select id="destino-oficio" style="width: 100%; padding: 5px;">
+                <option value="LEG">Congresso Nacional (Aprovação de Verba/Lei)</option>
+                <option value="JUD">STF (Consulta Jurídica)</option>
+            </select>
+            <br><br>
+            <textarea id="texto-oficio" placeholder="Escreva aqui a mensagem ou proposta de lei que será enviada em tempo real..."></textarea>
+            
+            <button class="btn-gov" onclick="protocolar()">ASSINAR E ENVIAR OFÍCIO</button>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <h3>🚨 Crises Urgentes</h3>
+            <div id="caixa-crises">
+                <div class="crise-alerta">
+                    <strong>Grevistas na Capital:</strong> Caminhoneiros pedem redução do diesel. 
+                    <button onclick="resolverCrise(this, -10000, 5)" style="padding: 2px; font-size: 10px;">Ceder</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <h3>📬 Respostas Recebidas</h3>
+            <div id="caixa-respostas" style="font-size: 0.8rem; color: #888;">
+                Aguardando retorno do Legislativo ou Judiciário...
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-    function protocolarOficio() {
-        const texto = document.getElementById('texto-oficio').value;
-        const destino = document.getElementById('destino').value;
-        const log = document.getElementById('log-envio');
+    let orcamento = 1000000;
+    let popularidade = 50;
 
-        if(texto.trim() === "") {
-            alert("O ofício não pode estar vazio.");
-            return;
+    function investir(area) {
+        if(orcamento >= 50000) {
+            orcamento -= 50000;
+            popularidade += 3;
+            atualizarGraficos();
+            alert("Investimento de R$ 50.000 realizado na " + area);
+        } else {
+            alert("Tesouro Nacional insuficiente!");
         }
+    }
 
-        // Simulação de envio
-        log.innerHTML = `⏳ Enviando documento para o ${destino}...`;
+    function resolverCrise(elemento, custo, pop) {
+        orcamento += custo;
+        popularidade += pop;
+        elemento.parentElement.remove();
+        atualizarGraficos();
+        alert("Crise resolvida.");
+    }
+
+    function atualizarGraficos() {
+        document.getElementById('val-orc').innerText = "R$ " + orcamento.toLocaleString();
+        document.getElementById('txt-pop').innerText = popularidade + "%";
+        document.getElementById('bar-pop').style.width = popularidade + "%";
         
-        setTimeout(() => {
-            log.innerHTML = `✅ Documento registrado no Diário Oficial e enviado ao ${destino}!`;
-            document.getElementById('texto-oficio').value = "";
-            
-            // Aqui futuramente enviaremos para o banco de dados (Firebase)
-            console.log("Dados prontos para o servidor:", {
-                origem: "Executivo",
-                destino: destino,
-                mensagem: texto,
-                data: new Date().toLocaleString()
-            });
-        }, 1500);
+        if(popularidade < 20) {
+            document.getElementById('bar-risco').style.width = "80%";
+            document.getElementById('txt-risco').innerText = "80% (PERIGO!)";
+        }
+    }
+
+    function protocolar() {
+        const texto = document.getElementById('texto-oficio').value;
+        if(texto.length < 10) return alert("Descreva melhor o ofício.");
+        
+        alert("Ofício protocolado! O documento agora aparecerá na página do destinatário.");
+        document.getElementById('texto-oficio').value = "";
     }
 </script>
 
