@@ -2,127 +2,95 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema de Governança Online - RFL•★•REAL</title>
+    <title>Painel da Presidência - RFL•★•REAL</title>
     <style>
-        :root { --exec: #27ae60; --leg: #2980b9; --jud: #8e44ad; }
-        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; margin: 0; }
+        :root { --cor-exec: #27ae60; --bg: #121212; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
         
-        /* Telas */
-        .tela { display: none; padding: 20px; }
-        .ativa { display: block; }
+        .header { background: var(--cor-exec); padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
 
-        /* Estilo dos Painéis */
-        .painel { border-radius: 15px; padding: 20px; max-width: 500px; margin: 20px auto; border-top: 10px solid; }
-        .painel-exec { border-color: var(--exec); background: #1e2d24; }
-        .painel-leg { border-color: var(--leg); background: #1e262d; }
-        .painel-jud { border-color: var(--jud); background: #261e2d; }
+        /* Status do País */
+        .card { background: #1e1e1e; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+        .status-val { font-size: 1.5rem; color: #f1c40f; font-weight: bold; }
 
-        .status { background: #333; padding: 10px; display: flex; justify-content: space-around; }
-        button { padding: 12px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
-        .btn-acao { background: #f1c40f; color: black; }
+        /* Criador de Ofício */
+        .editor-oficio { background: white; color: #333; padding: 30px; border-radius: 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .brasao { text-align: center; font-weight: bold; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #333; }
+        
+        textarea { width: 100%; height: 150px; border: 1px solid #ccc; padding: 10px; font-family: serif; font-size: 1.1rem; resize: none; margin: 10px 0; }
+        
+        select, button { width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+        .btn-enviar { background: var(--cor-exec); color: white; font-size: 1rem; }
+        
+        #log-envio { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
     </style>
 </head>
 <body>
 
-    <div class="status">
-        <span>💰 Orçamento: <b id="val-orc">1000</b></span>
-        <span>📊 Estabilidade: <b id="val-est">50</b></span>
-    </div>
+<div class="header">
+    <h1>PALÁCIO DO PLANALTO</h1>
+    <p>Gabinete da Presidência da República</p>
+</div>
 
-    <div id="tela-login" class="tela ativa">
-        <h1>Bem-vindo ao Sistema</h1>
-        <p>Selecione seu cargo para entrar no governo:</p>
-        <button onclick="entrarComo('EXEC')" style="background: var(--exec); color: white;">PRESIDENTE (Executivo)</button>
-        <button onclick="entrarComo('LEG')" style="background: var(--leg); color: white;">CONGRESSO (Legislativo)</button>
-        <button onclick="entrarComo('JUD')" style="background: var(--jud); color: white;">STF (Judiciário)</button>
-    </div>
-
-    <div id="tela-jogo" class="tela">
-        <h2 id="titulo-cargo">Carregando...</h2>
-        
-        <div id="conteudo-papel">
-            </div>
-
+<div class="container">
+    <div class="card">
+        <h3>Tesouro Nacional</h3>
+        <div class="status-val">R$ <span id="orcamento">1.000.000</span></div>
         <hr>
-        <div id="mensagens">Aguardando início do turno...</div>
-        <button onclick="voltar()" style="background: #555; color: white; margin-top: 20px;">Sair do Cargo</button>
+        <h3>Popularidade</h3>
+        <div class="status-val"><span id="pop">50</span>%</div>
+        <p><small>Ações pendentes influenciam esses números.</small></p>
     </div>
 
-    <script>
-        let papelAtual = "";
-        let turnoDeQuem = "EXEC"; // O jogo sempre começa com o Executivo
-
-        function entrarComo(papel) {
-            papelAtual = papel;
-            document.getElementById('tela-login').classList.remove('ativa');
-            document.getElementById('tela-jogo').classList.add('ativa');
+    <div class="card">
+        <div class="editor-oficio">
+            <div class="brasao">Ofício Presidencial nº 001/2026</div>
             
-            configurarPainel();
-        }
+            <label>Destinatário:</label>
+            <select id="destino">
+                <option value="Congresso Nacional">Congresso Nacional (Legislativo)</option>
+                <option value="Supremo Tribunal">Supremo Tribunal Federal (Judiciário)</option>
+            </select>
 
-        function configurarPainel() {
-            const painel = document.getElementById('conteudo-papel');
-            const titulo = document.getElementById('titulo-cargo');
+            <label>Conteúdo da Proposta:</label>
+            <textarea id="texto-oficio" placeholder="Ex: Solicito urgência na aprovação da verba para infraestrutura..."></textarea>
             
-            if (papelAtual === "EXEC") {
-                titulo.innerText = "Painel da Presidência";
-                titulo.style.color = "var(--exec)";
-                painel.innerHTML = `
-                    <div class="painel painel-exec">
-                        <p>Como Presidente, sua função é propor leis.</p>
-                        <button class="btn-acao" onclick="enviarAcao('Criar Auxílio Social')">Criar Auxílio Social</button>
-                        <button class="btn-acao" onclick="enviarAcao('Investir em Defesa')">Investir em Defesa</button>
-                    </div>
-                `;
-            } else if (papelAtual === "LEG") {
-                titulo.innerText = "Painel do Congresso";
-                titulo.style.color = "var(--leg)";
-                painel.innerHTML = `
-                    <div class="painel painel-leg">
-                        <p>Como Legislativo, você vota as propostas do Presidente.</p>
-                        <button class="btn-acao">Aprovar Proposta</button>
-                        <button class="btn-acao">Vetar Proposta</button>
-                    </div>
-                `;
-            } else if (papelAtual === "JUD") {
-                titulo.innerText = "Tribunal Superior";
-                titulo.style.color = "var(--jud)";
-                painel.innerHTML = `
-                    <div class="painel painel-jud">
-                        <p>Como Judiciário, você fiscaliza a lei.</p>
-                        <button class="btn-acao">Declarar Constitucional</button>
-                        <button class="btn-acao">Anular Lei</button>
-                    </div>
-                `;
-            }
+            <button class="btn-enviar" onclick="protocolarOficio()">PROTOCOLAR E ENVIAR</button>
+        </div>
+        <div id="log-envio"></div>
+    </div>
+</div>
+
+<script>
+    function protocolarOficio() {
+        const texto = document.getElementById('texto-oficio').value;
+        const destino = document.getElementById('destino').value;
+        const log = document.getElementById('log-envio');
+
+        if(texto.trim() === "") {
+            alert("O ofício não pode estar vazio.");
+            return;
+        }
+
+        // Simulação de envio
+        log.innerHTML = `⏳ Enviando documento para o ${destino}...`;
+        
+        setTimeout(() => {
+            log.innerHTML = `✅ Documento registrado no Diário Oficial e enviado ao ${destino}!`;
+            document.getElementById('texto-oficio').value = "";
             
-            verificarTurno();
-        }
+            // Aqui futuramente enviaremos para o banco de dados (Firebase)
+            console.log("Dados prontos para o servidor:", {
+                origem: "Executivo",
+                destino: destino,
+                mensagem: texto,
+                data: new Date().toLocaleString()
+            });
+        }, 1500);
+    }
+</script>
 
-        function verificarTurno() {
-            const btnAcoes = document.querySelectorAll('.btn-acao');
-            const msg = document.getElementById('mensagens');
-
-            if (papelAtual !== turnoDeQuem) {
-                btnAcoes.forEach(b => b.disabled = true);
-                msg.innerText = "🚫 Não é o seu turno. Aguarde os outros poderes.";
-            } else {
-                btnAcoes.forEach(b => b.disabled = false);
-                msg.innerText = "✅ É o seu turno! Tome uma decisão.";
-            }
-        }
-
-        function voltar() {
-            document.getElementById('tela-jogo').classList.remove('ativa');
-            document.getElementById('tela-login').classList.add('ativa');
-        }
-
-        function enviarAcao(nomeAcao) {
-            alert("Você escolheu: " + nomeAcao + ". (No futuro, isso será enviado via banco de dados)");
-            // Aqui mudamos o turno para o próximo poder
-            turnoDeQuem = "LEG";
-            verificarTurno();
-        }
-    </script>
 </body>
 </html>
