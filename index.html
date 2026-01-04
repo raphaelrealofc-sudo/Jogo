@@ -2,230 +2,127 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Governança - RFL•★•REAL</title>
+    <title>Sistema de Governança Online - RFL•★•REAL</title>
     <style>
-        :root {
-            --executivo: #27ae60;
-            --legislativo: #2980b9;
-            --judiciario: #8e44ad;
-            --bg: #1a1a1a;
-        }
+        :root { --exec: #27ae60; --leg: #2980b9; --jud: #8e44ad; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; margin: 0; }
+        
+        /* Telas */
+        .tela { display: none; padding: 20px; }
+        .ativa { display: block; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+        /* Estilo dos Painéis */
+        .painel { border-radius: 15px; padding: 20px; max-width: 500px; margin: 20px auto; border-top: 10px solid; }
+        .painel-exec { border-color: var(--exec); background: #1e2d24; }
+        .painel-leg { border-color: var(--leg); background: #1e262d; }
+        .painel-jud { border-color: var(--jud); background: #261e2d; }
 
-        header {
-            background: #333;
-            width: 100%;
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 3px solid #f1c40f;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 20px;
-            background: #444;
-            padding: 10px 20px;
-            border-radius: 0 0 10px 10px;
-            margin-bottom: 20px;
-        }
-
-        .stat { font-weight: bold; }
-        .stat span { color: #f1c40f; }
-
-        #game-container {
-            background: #2c3e50;
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .turno-card {
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .executivo { border: 4px solid var(--executivo); }
-        .legislativo { border: 4px solid var(--legislativo); }
-        .judiciario { border: 4px solid var(--judiciario); }
-
-        button {
-            padding: 12px 24px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        button:hover { opacity: 0.8; transform: scale(1.05); }
-
-        .btn-exec { background: var(--executivo); color: white; }
-        .btn-leg { background: var(--legislativo); color: white; }
-        .btn-jud { background: var(--judiciario); color: white; }
-
-        #log {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #bdc3c7;
-            background: #000;
-            padding: 10px;
-            border-radius: 5px;
-            height: 100px;
-            overflow-y: auto;
-        }
+        .status { background: #333; padding: 10px; display: flex; justify-content: space-around; }
+        button { padding: 12px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
+        .btn-acao { background: #f1c40f; color: black; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>RFL•★•REAL: Sistema de Governança</h1>
-</header>
+    <div class="status">
+        <span>💰 Orçamento: <b id="val-orc">1000</b></span>
+        <span>📊 Estabilidade: <b id="val-est">50</b></span>
+    </div>
 
-<div class="stats-bar">
-    <div class="stat">Orçamento: $<span id="orcamento">1000</span></div>
-    <div class="stat">Popularidade: <span id="popularidade">50</span>%</div>
-    <div class="stat">Estabilidade: <span id="estabilidade">50</span>%</div>
-</div>
+    <div id="tela-login" class="tela ativa">
+        <h1>Bem-vindo ao Sistema</h1>
+        <p>Selecione seu cargo para entrar no governo:</p>
+        <button onclick="entrarComo('EXEC')" style="background: var(--exec); color: white;">PRESIDENTE (Executivo)</button>
+        <button onclick="entrarComo('LEG')" style="background: var(--leg); color: white;">CONGRESSO (Legislativo)</button>
+        <button onclick="entrarComo('JUD')" style="background: var(--jud); color: white;">STF (Judiciário)</button>
+    </div>
 
-<div id="game-container">
-    <h2 id="fase-titulo">Turno do Executivo</h2>
-    <div id="turno-area" class="turno-card executivo">
-        <p id="descricao-fase">Presidente, escolha um projeto para o país:</p>
-        <div id="acoes">
+    <div id="tela-jogo" class="tela">
+        <h2 id="titulo-cargo">Carregando...</h2>
+        
+        <div id="conteudo-papel">
             </div>
+
+        <hr>
+        <div id="mensagens">Aguardando início do turno...</div>
+        <button onclick="voltar()" style="background: #555; color: white; margin-top: 20px;">Sair do Cargo</button>
     </div>
 
-    <div id="log">
-        <strong>Histórico:</strong>
-        <div id="log-texto">O jogo começou.</div>
-    </div>
-</div>
+    <script>
+        let papelAtual = "";
+        let turnoDeQuem = "EXEC"; // O jogo sempre começa com o Executivo
 
-<script>
-    // Variáveis de Estado
-    let status = { orcamento: 1000, popularidade: 50, estabilidade: 50 };
-    let turno = "Executivo";
-    let projetoAtual = null;
-
-    const configFases = {
-        "Executivo": {
-            cor: "executivo",
-            titulo: "Turno do Executivo (Presidente)",
-            descricao: "Proponha uma medida para o país:",
-            opcoes: [
-                { nome: "Investir na Saúde", custo: 200, pop: 15, est: 5 },
-                { nome: "Privatizar Empresa", custo: -300, pop: -10, est: 10 },
-                { nome: "Aumentar Impostos", custo: -500, pop: -20, est: 15 }
-            ]
-        },
-        "Legislativo": {
-            cor: "legislativo",
-            titulo: "Turno do Legislativo (Congresso)",
-            descricao: "O Executivo propôs: [PROJETO]. Vocês aprovam?",
-            opcoes: [
-                { nome: "Aprovar Projeto", acao: "aprovar" },
-                { nome: "Vetar Projeto", acao: "vetar" }
-            ]
-        },
-        "Judiciario": {
-            cor: "judiciario",
-            titulo: "Turno do Judiciário (STF)",
-            descricao: "Analise a constitucionalidade da decisão.",
-            opcoes: [
-                { nome: "Manter Decisão", acao: "manter" },
-                { nome: "Anular (Inconstitucional)", acao: "anular" }
-            ]
-        }
-    };
-
-    function atualizarInterface() {
-        document.getElementById('orcamento').innerText = status.orcamento;
-        document.getElementById('popularidade').innerText = status.popularidade;
-        document.getElementById('estabilidade').innerText = status.estabilidade;
-
-        const fase = configFases[turno];
-        document.getElementById('fase-titulo').innerText = fase.titulo;
-        document.getElementById('turno-area').className = `turno-card ${fase.cor}`;
-        
-        let desc = fase.descricao;
-        if(projetoAtual) desc = desc.replace("[PROJETO]", projetoAtual.nome);
-        document.getElementById('descricao-fase').innerText = desc;
-
-        const acoesDiv = document.getElementById('acoes');
-        acoesDiv.innerHTML = "";
-
-        fase.opcoes.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.innerText = opt.nome;
-            btn.className = `btn-${turno.substring(0,3).toLowerCase()}`;
-            btn.onclick = () => processarEscolha(opt);
-            acoesDiv.appendChild(btn);
-        });
-    }
-
-    function processarEscolha(escolha) {
-        const log = document.getElementById('log-texto');
-
-        if (turno === "Executivo") {
-            projetoAtual = escolha;
-            log.innerHTML += `<br>Executivo propôs: ${escolha.nome}`;
-            turno = "Legislativo";
-        } 
-        else if (turno === "Legislativo") {
-            if (escolha.acao === "vetar") {
-                status.estabilidade -= 10;
-                log.innerHTML += `<br>Legislativo VETOU o projeto. Crise política!`;
-                projetoAtual = null;
-                turno = "Executivo";
-            } else {
-                log.innerHTML += `<br>Legislativo APROVOU. Aguardando Judiciário...`;
-                turno = "Judiciario";
-            }
-        } 
-        else if (turno === "Judiciario") {
-            if (escolha.acao === "anular") {
-                status.estabilidade += 5;
-                log.innerHTML += `<br>Judiciário ANULOU por ser inconstitucional.`;
-            } else {
-                aplicarProjeto();
-                log.innerHTML += `<br>Projeto CONCLUÍDO com sucesso!`;
-            }
-            projetoAtual = null;
-            turno = "Executivo";
+        function entrarComo(papel) {
+            papelAtual = papel;
+            document.getElementById('tela-login').classList.remove('ativa');
+            document.getElementById('tela-jogo').classList.add('ativa');
+            
+            configurarPainel();
         }
 
-        atualizarInterface();
-    }
+        function configurarPainel() {
+            const painel = document.getElementById('conteudo-papel');
+            const titulo = document.getElementById('titulo-cargo');
+            
+            if (papelAtual === "EXEC") {
+                titulo.innerText = "Painel da Presidência";
+                titulo.style.color = "var(--exec)";
+                painel.innerHTML = `
+                    <div class="painel painel-exec">
+                        <p>Como Presidente, sua função é propor leis.</p>
+                        <button class="btn-acao" onclick="enviarAcao('Criar Auxílio Social')">Criar Auxílio Social</button>
+                        <button class="btn-acao" onclick="enviarAcao('Investir em Defesa')">Investir em Defesa</button>
+                    </div>
+                `;
+            } else if (papelAtual === "LEG") {
+                titulo.innerText = "Painel do Congresso";
+                titulo.style.color = "var(--leg)";
+                painel.innerHTML = `
+                    <div class="painel painel-leg">
+                        <p>Como Legislativo, você vota as propostas do Presidente.</p>
+                        <button class="btn-acao">Aprovar Proposta</button>
+                        <button class="btn-acao">Vetar Proposta</button>
+                    </div>
+                `;
+            } else if (papelAtual === "JUD") {
+                titulo.innerText = "Tribunal Superior";
+                titulo.style.color = "var(--jud)";
+                painel.innerHTML = `
+                    <div class="painel painel-jud">
+                        <p>Como Judiciário, você fiscaliza a lei.</p>
+                        <button class="btn-acao">Declarar Constitucional</button>
+                        <button class="btn-acao">Anular Lei</button>
+                    </div>
+                `;
+            }
+            
+            verificarTurno();
+        }
 
-    function aplicarProjeto() {
-        status.orcamento -= projetoAtual.custo;
-        status.popularidade += projetoAtual.pop;
-        status.estabilidade += projetoAtual.est;
-        
-        // Limites
-        if(status.popularidade > 100) status.popularidade = 100;
-        if(status.popularidade < 0) alert("GAME OVER: O povo fez uma revolução!");
-    }
+        function verificarTurno() {
+            const btnAcoes = document.querySelectorAll('.btn-acao');
+            const msg = document.getElementById('mensagens');
 
-    atualizarInterface();
-</script>
+            if (papelAtual !== turnoDeQuem) {
+                btnAcoes.forEach(b => b.disabled = true);
+                msg.innerText = "🚫 Não é o seu turno. Aguarde os outros poderes.";
+            } else {
+                btnAcoes.forEach(b => b.disabled = false);
+                msg.innerText = "✅ É o seu turno! Tome uma decisão.";
+            }
+        }
 
+        function voltar() {
+            document.getElementById('tela-jogo').classList.remove('ativa');
+            document.getElementById('tela-login').classList.add('ativa');
+        }
+
+        function enviarAcao(nomeAcao) {
+            alert("Você escolheu: " + nomeAcao + ". (No futuro, isso será enviado via banco de dados)");
+            // Aqui mudamos o turno para o próximo poder
+            turnoDeQuem = "LEG";
+            verificarTurno();
+        }
+    </script>
 </body>
 </html>
