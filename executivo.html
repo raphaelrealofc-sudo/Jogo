@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel da Presidência - RFL•★•REAL</title>
+    <style>
+        :root { --cor-exec: #27ae60; --bg: #121212; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; }
+        
+        .header { background: var(--cor-exec); padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+
+        /* Status do País */
+        .card { background: #1e1e1e; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+        .status-val { font-size: 1.5rem; color: #f1c40f; font-weight: bold; }
+
+        /* Criador de Ofício */
+        .editor-oficio { background: white; color: #333; padding: 30px; border-radius: 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .brasao { text-align: center; font-weight: bold; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #333; }
+        
+        textarea { width: 100%; height: 150px; border: 1px solid #ccc; padding: 10px; font-family: serif; font-size: 1.1rem; resize: none; margin: 10px 0; }
+        
+        select, button { width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+        .btn-enviar { background: var(--cor-exec); color: white; font-size: 1rem; }
+        
+        #log-envio { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>PALÁCIO DO PLANALTO</h1>
+    <p>Gabinete da Presidência da República</p>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h3>Tesouro Nacional</h3>
+        <div class="status-val">R$ <span id="orcamento">1.000.000</span></div>
+        <hr>
+        <h3>Popularidade</h3>
+        <div class="status-val"><span id="pop">50</span>%</div>
+        <p><small>Ações pendentes influenciam esses números.</small></p>
+    </div>
+
+    <div class="card">
+        <div class="editor-oficio">
+            <div class="brasao">Ofício Presidencial nº 001/2026</div>
+            
+            <label>Destinatário:</label>
+            <select id="destino">
+                <option value="Congresso Nacional">Congresso Nacional (Legislativo)</option>
+                <option value="Supremo Tribunal">Supremo Tribunal Federal (Judiciário)</option>
+            </select>
+
+            <label>Conteúdo da Proposta:</label>
+            <textarea id="texto-oficio" placeholder="Ex: Solicito urgência na aprovação da verba para infraestrutura..."></textarea>
+            
+            <button class="btn-enviar" onclick="protocolarOficio()">PROTOCOLAR E ENVIAR</button>
+        </div>
+        <div id="log-envio"></div>
+    </div>
+</div>
+
+<script>
+    function protocolarOficio() {
+        const texto = document.getElementById('texto-oficio').value;
+        const destino = document.getElementById('destino').value;
+        const log = document.getElementById('log-envio');
+
+        if(texto.trim() === "") {
+            alert("O ofício não pode estar vazio.");
+            return;
+        }
+
+        // Simulação de envio
+        log.innerHTML = `⏳ Enviando documento para o ${destino}...`;
+        
+        setTimeout(() => {
+            log.innerHTML = `✅ Documento registrado no Diário Oficial e enviado ao ${destino}!`;
+            document.getElementById('texto-oficio').value = "";
+            
+            // Aqui futuramente enviaremos para o banco de dados (Firebase)
+            console.log("Dados prontos para o servidor:", {
+                origem: "Executivo",
+                destino: destino,
+                mensagem: texto,
+                data: new Date().toLocaleString()
+            });
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
